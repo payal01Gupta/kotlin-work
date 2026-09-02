@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class PostViewModel : ViewModel() {
      private val repository = PostRepository(RetrofitClient.apiService)
      private val _posts = MutableLiveData<UiState<List<PostModel>>>()
-
      val posts : LiveData<UiState<List<PostModel>>> = _posts
 
     fun getPosts() {
