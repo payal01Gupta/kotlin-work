@@ -20,6 +20,7 @@ interface ApiService {
     suspend fun loginApi(@Query("username") username: String,
                          @Query("password") password: String): Response<LoginResponse>
 
+    @GET("player_api.php?")
     suspend fun getLiveCategories(
         @Query("username") username: String,
         @Query("password") password: String,
