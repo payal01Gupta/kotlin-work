@@ -22,7 +22,39 @@ class LoginViewModel : ViewModel() {
 //    private val _liveCategories : MutableLiveData<List<Category>>()
 //    private val liveCategories : LiveData<List<Category>> = _liveCategories
 
-     fun login(username: String, password: String){
+    fun login(username: String, password: String) {
+
+        repository.login(
+            username = username,
+            password = password,
+            onSuccess = { response ->
+                // FIRST API SUCCESS
+                _loginResponse.value = response
+                // Now call SECOND API
+                liveCategories(username, password) },
+
+            onError = { errorMessage ->
+                println("Login Error: ${errorMessage}")
+            }
+        )
+    }
+
+
+     fun liveCategories(username: String, password: String) {
+        repository.getLiveCategories(
+            username = username,
+            password = password,
+            onSuccess = { categoryList ->
+                // SECOND API SUCCESS
+                _liveCategories.value = categoryList },
+
+            onError = { errorMessage ->
+                println("Category Error: ${errorMessage}")
+            }
+        )
+    }
+
+     /*fun login(username: String, password: String){
         viewModelScope.launch {
             val result = repository.login(username, password)
             result.onSuccess {
@@ -46,5 +78,5 @@ class LoginViewModel : ViewModel() {
                 println("Category Error: ${it.message}")
             }
         }
-    }
+    }*/
 }
