@@ -2,7 +2,8 @@ package com.example.mykotlinwork.ui.models
 
 data class LoginResponse(
     val user_info: UserInfo,
-    val server_info: ServerInfo
+    val server_info: ServerInfo,
+    val error: String
 )
 
 data class UserInfo(

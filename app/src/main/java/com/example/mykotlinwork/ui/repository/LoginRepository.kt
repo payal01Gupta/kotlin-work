@@ -9,6 +9,46 @@ import retrofit2.Response
 
 class LoginRepository(private val apiService: ApiService) {
 
+
+    //////*******Start of Repo function with HOF **********///////
+
+    suspend fun login(username: String,
+                      password: String,
+                      onResult : (Result<LoginResponse>) -> Unit) {
+        try {
+            val response = apiService.loginApi(username, password)
+            if(response.isSuccessful) {
+                response.body()?.let{
+                    onResult(Result.success(it))
+                } ?: onResult(Result.failure(Exception("Response body is empty")))
+            } else {
+                onResult(Result.failure(Exception("API Error: ${response.code()} ${response.message()}")))
+            }
+        } catch (e: Exception) {
+            onResult(Result.failure(e))
+        }
+    }
+
+    suspend fun getLiveCategories(username: String,
+                      password: String,
+                      onResult: (Result<List<Category>>) -> Unit) {
+        try {
+            val response = apiService.getLiveCategories(username, password)
+            if(response.isSuccessful) {
+                response.body()?.let {
+                    onResult(Result.success(it))
+                } ?: onResult(Result.failure(Exception("Response body is empty")))
+            } else{
+                onResult(Result.failure(Exception("API Error: ${response.code()} ${response.message()}")))
+            }
+        } catch (e: Exception) {
+            onResult(Result.failure(e))
+        }
+    }
+
+        //////*******End of Repo function with HOF **********///////
+
+
 //    suspend fun login(username: String, password: String): Result<LoginResponse> {
 //        return try {
 //            val response = apiService.loginApi(username,password)
@@ -39,7 +79,7 @@ class LoginRepository(private val apiService: ApiService) {
 //        }
 //    }
 
-    fun login(username: String,
+   /* fun login(username: String,
         password: String,
         onSuccess: (LoginResponse) -> Unit,
         onError: (String) -> Unit) {
@@ -91,5 +131,5 @@ class LoginRepository(private val apiService: ApiService) {
                     onError(t.message ?: "Category API failed")
                 }
             })
-    }
+    }*/
 }

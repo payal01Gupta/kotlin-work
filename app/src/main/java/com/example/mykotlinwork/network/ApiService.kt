@@ -17,18 +17,18 @@ interface ApiService {
     @GET("posts")
     suspend fun getPosts() : Response<List<PostModel>>
 
-//    @GET("player_api.php?")
-//    suspend fun loginApi(@Query("username") username: String,
-//                         @Query("password") password: String): Response<LoginResponse>
-//
-//    @GET("player_api.php?")
-//    suspend fun getLiveCategories(
-//        @Query("username") username: String,
-//        @Query("password") password: String,
-//        @Query("action") action: String = "get_live_categories"
-//    ): Response<List<Category>>
+    @GET("player_api.php?")
+    suspend fun loginApi(@Query("username") username: String,
+                         @Query("password") password: String): Response<LoginResponse>
 
     @GET("player_api.php?")
+    suspend fun getLiveCategories(
+        @Query("username") username: String,
+        @Query("password") password: String,
+        @Query("action") action: String = "get_live_categories"
+    ): Response<List<Category>>
+
+   /* @GET("player_api.php?")
      fun loginApi(@Query("username") username: String,
                          @Query("password") password: String): Call<LoginResponse>
 
@@ -37,5 +37,5 @@ interface ApiService {
         @Query("username") username: String,
         @Query("password") password: String,
         @Query("action") action: String = "get_live_categories"
-    ): Call<List<Category>>
+    ): Call<List<Category>>*/
 }

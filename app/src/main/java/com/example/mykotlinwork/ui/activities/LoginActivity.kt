@@ -68,5 +68,11 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
             }
         }
+
+        viewModel.loginError.observe(this) { errorMessage ->
+            if(!errorMessage.isEmpty()) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

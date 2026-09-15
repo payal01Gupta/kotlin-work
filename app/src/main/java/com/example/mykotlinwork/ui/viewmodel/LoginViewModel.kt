@@ -16,13 +16,19 @@ class LoginViewModel : ViewModel() {
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse : LiveData<LoginResponse> = _loginResponse
 
+    private val _loginError = MutableLiveData<String>()
+    val loginError : LiveData<String> = _loginError
+
     private val _liveCategories = MutableLiveData<List<Category>>()
     val liveCategories : LiveData<List<Category>> = _liveCategories
 
 //    private val _liveCategories : MutableLiveData<List<Category>>()
 //    private val liveCategories : LiveData<List<Category>> = _liveCategories
 
-    fun login(username: String, password: String) {
+
+    ////// ViewModel function with using Call///////////
+
+    /*fun login(username: String, password: String) {
 
         repository.login(
             username = username,
@@ -52,31 +58,64 @@ class LoginViewModel : ViewModel() {
                 println("Category Error: ${errorMessage}")
             }
         )
-    }
+    }*/
+    ////// ViewModel function with using Call///////////
 
-     /*fun login(username: String, password: String){
+   /////////*viewModel function with HOF*////////////
+
+    fun login(username: String, password: String) {
         viewModelScope.launch {
-            val result = repository.login(username, password)
+        repository.login(username, password, { result ->
             result.onSuccess {
                 _loginResponse.value = it
+                _loginError.value = null
             }
-            result.onFailure {
-                _loginResponse.value = null
-                println("Login Error: ${it.message}")
+            result.onFailure { e ->
+                _loginError.value = "Login Error: ${e.message}"
+                println("Login Error: ${e.message}")
             }
+        })
+     }
+  }
+
+    fun liveCategories(username: String,password: String) {
+        viewModelScope.launch {
+            repository.getLiveCategories(username, password, { result ->
+                result.onSuccess {
+                    _liveCategories.value = it
+                }
+                result.onFailure {
+                    _liveCategories.value = null
+                    println("Category Error: ${it.message}")
+                }
+            })
         }
     }
+    ////////*********End of viewModel function with HOF********/////////
 
-    fun liveCategories(username: String, password: String){
-        viewModelScope.launch {
-            val result = repository.getLiveCategories(username, password)
-            result.onSuccess {
-                _liveCategories.value = it
-            }
-            result.onFailure {
-                _liveCategories.value = null
-                println("Category Error: ${it.message}")
-            }
-        }
-    }*/
+//     fun login(username: String, password: String){
+//        viewModelScope.launch {
+//            val result = repository.login(username, password)
+//            result.onSuccess {
+//                _loginResponse.value = it
+//            }
+//            result.onFailure {
+//                _loginResponse.value = null
+//                println("Login Error: ${it.message}")
+//            }
+//        }
+//    }
+//
+//    fun liveCategories(username: String, password: String){
+//        viewModelScope.launch {
+//            val result = repository.getLiveCategories(username, password)
+//            result.onSuccess {
+//                _liveCategories.value = it
+//            }
+//            result.onFailure {
+//                _liveCategories.value = null
+//                println("Category Error: ${it.message}")
+//            }
+//        }
+//    }
 }
